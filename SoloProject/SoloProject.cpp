@@ -2,6 +2,7 @@
 #include <map>
 #include <locale.h>
 #include <string>
+#include <conio.h>
 #include <vcruntime_startup.h>
 
 using namespace std;
@@ -112,7 +113,9 @@ string RomToNum(string roman_num)
     string curr = "";
     string incoming = "";
     int result = 0;
-        
+
+    if (roman_num.length() == 1) return to_string(liter[roman_num]);
+    
     if (NumIsCorrect(roman_num, liter))
     {
         if (roman_num.size() >= 2)
@@ -154,22 +157,24 @@ string RomToNum(string roman_num)
     return returnable_result;
 }
 
-void main()
+int main()
 {
-    int mode;
+    char mode;
     do
     {
+        system("cls");
         cout << "Mode selector:";
         cout << "\n1 - Roman number to arabic";
         cout << "\n2 - Arabic number to roman\n";
-        cin >> mode;
+        cout << "\n0 - Exit\n";
+        mode = _getch();
         system("cls");
     }
-    while (mode != 1 && mode != 2 && mode != 0);
-    if (mode == 2)
+    while (mode != '1' && mode != '2' && mode != '0');
+    if (mode == '2')
     {
         int num;
-        
+        cout << "!Chosen mode - Arabic to Roman!\n";
         cout << "Enter a number: "; cin >> num;
         
         if (num >= 1 && num <= 3999)
@@ -177,18 +182,19 @@ void main()
         else
             cout << "error";
     }
-    else if (mode == 1)
+    else if (mode == '1')
     {
         string roman_num, converted;
-        
+        cout << "!Chosen mode - Roman to Arabic!\n";
+
         cout << "Enter roman number: "; cin >> roman_num;
 
         converted = RomToNum(roman_num);
-
+        
         if (converted == "ERROR")
         {
-            cout << "error";
-            return;
+            cout << "error1";
+            return 1;
         }
         
         if (roman_num == NumToRom(stoi(converted)))
@@ -198,4 +204,7 @@ void main()
             cout << "error";
         }
     }
+    else cout << "Session was cancelled";
+
+    return 0;
 }
