@@ -2,6 +2,7 @@
 #include <map>
 #include <locale.h>
 #include <string>
+#include <vcruntime_startup.h>
 
 using namespace std;
 
@@ -70,7 +71,7 @@ string NumToRom(int num)
     return rom_num;
 }
 
-bool CorrectNumber(string roman_num, map <string, int>)
+bool NumIsCorrect(string roman_num, map <string, int>)
 {
     bool rules = true;
     
@@ -110,11 +111,9 @@ string RomToNum(string roman_num)
     
     string curr = "";
     string incoming = "";
-    string third_letter = "";
     int result = 0;
-    int times = 1;
         
-    if (CorrectNumber(roman_num, liter))
+    if (NumIsCorrect(roman_num, liter))
     {
         if (roman_num.size() >= 2)
         {
@@ -122,8 +121,6 @@ string RomToNum(string roman_num)
             {
                 curr = roman_num[i];
                 incoming = roman_num[i + 1];
-
-                if (curr == "-") times *= 1000;
                 
                 if (liter[curr] < liter[incoming])
                 {
@@ -152,34 +149,35 @@ string RomToNum(string roman_num)
         return error_msg;
     }
     
-    result *= times;
-
     string returnable_result = to_string(result);
     
-    //if (roman_num == NumToRom(result))
-    //    return  returnable_result;
-    //else return error_msg;
     return returnable_result;
 }
 
 void main()
 {
-    int lever;
+    int mode;
     do
     {
-        cout << "Choose a mode:";
+        cout << "Mode selector:";
         cout << "\n1 - Roman number to arabic";
         cout << "\n2 - Arabic number to roman\n";
-        cin >> lever;
+        cin >> mode;
+        system("cls");
     }
-    while (lever != 1 && lever != 2 && lever != 0);
-    if (lever == 2)
+    while (mode != 1 && mode != 2 && mode != 0);
+    if (mode == 2)
     {
         int num;
+        
         cout << "Enter a number: "; cin >> num;
-        cout << NumToRom(num);
+        
+        if (num >= 1 && num <= 3999)
+            cout << NumToRom(num);
+        else
+            cout << "error";
     }
-    if (lever == 1)
+    else if (mode == 1)
     {
         string roman_num, converted;
         
@@ -187,14 +185,17 @@ void main()
 
         converted = RomToNum(roman_num);
 
+        if (converted == "ERROR")
+        {
+            cout << "error";
+            return;
+        }
+        
         if (roman_num == NumToRom(stoi(converted)))
             cout << converted;
         else
         {
-            if (converted == RomToNum(NumToRom(stoi(converted))))
-                cout << converted;
-            else
-                cout << "ERROR";
+            cout << "error";
         }
     }
 }
